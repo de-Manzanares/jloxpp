@@ -8,14 +8,21 @@
  */
 class Lox {
  public:
+  Lox();                 ///< constructor
+  ~Lox();                ///< destructor
+  static bool had_error; ///< error flag
+
+  //*************** PUBLIC METHODS *********************************************
+
   /**
-   * @brief Main entry
+   * @brief Main entry \n
    * Usage: lox <filename> // runs file \n
    *        lox // runs repl
    */
   int main(int argc, char const *argv[]) const;
-  Lox();  ///< constructor
-  ~Lox(); ///< destructor
+
+  static void error(std::size_t const &line, std::string const &message);
+  //****************************************************************************
 
  private:
   struct impl;
