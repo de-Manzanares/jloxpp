@@ -28,33 +28,71 @@ struct Lexer::impl {
     unsigned char const ch = advance();
     switch (ch) {
       using tt = Token_Type;
-      // clang-format off
-      case '(': add_token(tt::LEFT_PAREN); break;
-      case ')': add_token(tt::RIGHT_PAREN); break;
-      case '{': add_token(tt::LEFT_BRACE); break;
-      case '}': add_token(tt::RIGHT_BRACE); break;
-      case ',': add_token(tt::COMMA); break;
-      case '.': add_token(tt::DOT); break;
-      case '-': add_token(tt::MINUS); break;
-      case '+': add_token(tt::PLUS); break;
-      case ';': add_token(tt::SEMICOLON); break;
-      case '*': add_token(tt::STAR); break;
+    case '(':
+      add_token(tt::LEFT_PAREN);
+      break; // single character
+    case ')':
+      add_token(tt::RIGHT_PAREN);
+      break;
+    case '{':
+      add_token(tt::LEFT_BRACE);
+      break;
+    case '}':
+      add_token(tt::RIGHT_BRACE);
+      break;
+    case ',':
+      add_token(tt::COMMA);
+      break;
+    case '.':
+      add_token(tt::DOT);
+      break;
+    case '-':
+      add_token(tt::MINUS);
+      break;
+    case '+':
+      add_token(tt::PLUS);
+      break;
+    case ';':
+      add_token(tt::SEMICOLON);
+      break;
+    case '*':
+      add_token(tt::STAR);
+      break;
+    case '!':
+      add_token(match('=') ? tt::BANG_EQUAL : tt::BANG);
+      break;
+    case '=':
+      add_token(match('=') ? tt::EQUAL_EQUAL : tt::EQUAL);
+      break;
+    case '<':
+      add_token(match('=') ? tt::LESS_EQUAL : tt::LESS);
+      break;
+    case '>':
+      add_token(match('=') ? tt::GREATER_EQUAL : tt::GREATER);
+      break;
     default:
       Lox::error(_line, "Unexpected character.");
       break;
-      // clang-format on
     }
   }
 
   /// consume a character and return it
   unsigned char advance() { return _source[_current++]; }
 
-  ///
   void add_token(Token_Type const &type) { add_token(type, ""); }
 
   void add_token(Token_Type const &type, std::string const &literal) {
     std::string text = _source.substr(_start, _current - _start);
     _tokens.emplace_back(type, text, literal, _line);
+  }
+
+  /// is the next character what we expect it to be?
+  bool match(unsigned char const expected) {
+    if (is_at_end() || _source[_current] != expected) {
+      return false;
+    }
+    ++_current;
+    return true;
   }
 };
 
