@@ -25,7 +25,8 @@ struct Lexer::impl {
 
   /// tokenize a single word/lexeme
   void lex_token() {
-    switch (unsigned char ch = advance()) {
+    unsigned char const ch = advance();
+    switch (ch) {
       using tt = Token_Type;
       // clang-format off
       case '(': add_token(tt::LEFT_PAREN); break;
