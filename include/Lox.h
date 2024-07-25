@@ -2,6 +2,7 @@
 #define INCLUDE_LOX_H_
 
 #include <memory>
+#include <string>
 
 /*
  * @brief Implementation of the lox language

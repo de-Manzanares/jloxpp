@@ -1,9 +1,10 @@
-#ifndef LEXER_H
-#define LEXER_H
+#ifndef INCLUDE_LEXER_H_
+#define INCLUDE_LEXER_H_
 
 #include "Token.h"
 
 #include <memory>
+#include <string>
 #include <vector>
 
 class Lexer {
@@ -22,4 +23,4 @@ class Lexer {
   std::unique_ptr<impl> pimpl; ///< pointer to implementation
 };
 
-#endif // LEXER_H
+#endif // INCLUDE_LEXER_H_
