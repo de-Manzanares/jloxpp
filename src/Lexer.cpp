@@ -40,8 +40,8 @@ struct Lexer::impl {
       case ';': add_token(tt::SEMICOLON); break;
       case '*': add_token(tt::STAR); break;
     default:
-        Lox::error(_line,"Unexpected character.");
-        break;
+      Lox::error(_line, "Unexpected character.");
+      break;
       // clang-format on
     }
   }

@@ -1,9 +1,10 @@
-#ifndef TOKEN_H
-#define TOKEN_H
+#ifndef INCLUDE_TOKEN_H_
+#define INCLUDE_TOKEN_H_
 
 #include "TokenType.hpp"
 
 #include <memory>
+#include <string>
 
 class Token {
  public:
@@ -23,4 +24,4 @@ class Token {
   std::shared_ptr<impl> pimpl; ///< pointer to implementation
 };
 
-#endif // TOKEN_H
+#endif // INCLUDE_TOKEN_H_

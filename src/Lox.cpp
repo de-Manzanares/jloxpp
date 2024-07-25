@@ -67,7 +67,7 @@ Lox::~Lox() = default;
 
 int Lox::main(int const argc, char const *argv[]) const {
   if (argc > 2) {
-    std::cout << "Usage: jlox <script>\n";
+    std::cout << "Usage: lox <script>\n";
     return 1;
   }
   if (argc == 2) {
