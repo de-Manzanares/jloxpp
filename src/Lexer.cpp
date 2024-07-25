@@ -23,6 +23,15 @@ struct Lexer::impl {
   /// have we consumed all the characters?
   [[nodiscard]] bool is_at_end() const { return _current >= _source.size(); }
 
+  /// purposefully avoids consuming newline so that our switch can catch it
+  /// and count the line
+  [[nodiscard]] unsigned char peek() const {
+    if (is_at_end()) {
+      return '\0';
+    }
+    return _source[_current];
+  }
+
   /// tokenize a single word/lexeme
   void lex_token() {
     unsigned char const ch = advance();
@@ -69,6 +78,20 @@ struct Lexer::impl {
       break;
     case '>':
       add_token(match('=') ? tt::GREATER_EQUAL : tt::GREATER);
+      break;
+    case '/':
+      if (match('/')) { // the beginning of a comment
+        while (!is_at_end() && peek() != '\n') {
+          advance();
+        }
+        break;
+      }
+    case ' ':
+    case '\r':
+    case '\t':
+      break; // ignore whitespace
+    case '\n':
+      ++_line; // count lines
       break;
     default:
       Lox::error(_line, "Unexpected character.");
