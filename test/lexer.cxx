@@ -8,7 +8,7 @@ using tt = Token_Type;
 std::vector<tt> extract_token_types(std::vector<Token> const &tokens) {
   std::vector<tt> token_types;
   token_types.reserve(tokens.size());
-for (auto const &token : tokens) {
+  for (auto const &token : tokens) {
     token_types.emplace_back(token.type());
   }
   return token_types;
@@ -49,8 +49,10 @@ TEST_CASE("token types") {
   CHECK(test_tt("<", std::vector{tt::LESS, tt::loxEOF}));
   CHECK(test_tt("<=", std::vector{tt::LESS_EQUAL, tt::loxEOF}));
   CHECK(test_tt("identifier", std::vector{tt::IDENTIFIER, tt::loxEOF}));
+  CHECK(test_tt("_identifier123_", std::vector{tt::IDENTIFIER, tt::loxEOF}));
+  CHECK(test_tt("identi_f_ier123", std::vector{tt::IDENTIFIER, tt::loxEOF}));
   CHECK(test_tt("\"this is a string\"", std::vector{tt::STRING, tt::loxEOF}));
-  CHECK(test_tt("\"this is \n multi line string\"", std::vector{tt::STRING, tt::loxEOF}));
+  CHECK(test_tt("\"2 line\nstring\"", std::vector{tt::STRING, tt::loxEOF}));
   CHECK(test_tt("7", std::vector{tt::NUMBER, tt::loxEOF}));
   CHECK(test_tt("72", std::vector{tt::NUMBER, tt::loxEOF}));
   CHECK(test_tt("72.876", std::vector{tt::NUMBER, tt::loxEOF}));
