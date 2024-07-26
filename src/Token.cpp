@@ -30,5 +30,6 @@ Token::~Token() = default;
 /// to string
 std::string Token::to_string() const {
   return std::to_string(static_cast<std::size_t>(pimpl->_type)) + " " +
-         pimpl->_lexeme + pimpl->_literal;
+         pimpl->_lexeme + " " + pimpl->_literal;
 }
+Token_Type Token::type() const { return pimpl->_type; }
