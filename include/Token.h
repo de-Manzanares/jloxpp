@@ -16,6 +16,7 @@ class Token {
   //*************** PUBLIC METHODS *********************************************
 
   [[nodiscard]] std::string to_string() const; ///< stringify
+  [[nodiscard]] Token_Type type() const;
 
   //****************************************************************************
 
