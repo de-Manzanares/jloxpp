@@ -22,8 +22,7 @@ struct Lexer::impl {
 
   /// tokenize a single word/lexeme
   void lex_token() {
-    char const ch = advance();
-    switch (ch) {
+    switch (char const ch = advance()) {
       using tt = Token_Type;
     case '(':
       add_token(tt::LEFT_PAREN);
@@ -85,6 +84,10 @@ struct Lexer::impl {
       string_literal();
       break;
     default:
+      if (std::isdigit(ch)) { // numeric literal
+        numeric_literal();
+        break;
+      }
       Lox::error(_line, "Unexpected character.");
       break;
     }
@@ -95,9 +98,9 @@ struct Lexer::impl {
 
   void add_token(Token_Type const &type) { add_token(type, ""); }
 
-  void add_token(Token_Type const &type, std::string const &literal) {
+  void add_token(Token_Type const &type, Token_Value const &value) {
     std::string text = _source.substr(_start, _current - _start);
-    _tokens.emplace_back(type, text, literal, _line);
+    _tokens.emplace_back(type, text, value, _line);
   }
 
   /// have we consumed all the characters?
@@ -105,11 +108,11 @@ struct Lexer::impl {
 
   /// purposefully avoids consuming newline so that our switch can catch it
   /// and count the line
-  [[nodiscard]] char peek() const {
+  [[nodiscard]] char peek(std::size_t const distance_from_current = 0) const {
     if (is_at_end()) {
       return '\0';
     }
-    return _source[_current];
+    return _source[_current + distance_from_current];
   }
 
   /// store the entire string as the value of the tt::STRING
@@ -130,6 +133,23 @@ struct Lexer::impl {
     } else if (peek() == '\0') {
       Lox::error(_line, "Missing quotation mark \"");
     }
+  }
+
+  /// store the numeric literal as the value of the tt:NUMBER
+  void numeric_literal() {
+    while (std::isdigit(peek())) {
+      advance();
+    }
+    // permit one decimal, but not at the end of a number e.g. "158."
+    if (peek() == '.' && std::isdigit(peek(1))) {
+      advance();
+      while (std::isdigit(peek())) {
+        advance();
+      }
+    }
+    double _numeric_literal =
+        std::stod(_source.substr(_start, _current - _start));
+    add_token(Token_Type::NUMBER, _numeric_literal);
   }
 
   /// is the next character what we expect it to be?
