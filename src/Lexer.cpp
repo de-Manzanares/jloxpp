@@ -20,21 +20,9 @@ struct Lexer::impl {
   std::size_t _current{};     ///< character we are currently considering
   std::size_t _line = 1;      ///< line we are lexing
 
-  /// have we consumed all the characters?
-  [[nodiscard]] bool is_at_end() const { return _current >= _source.size(); }
-
-  /// purposefully avoids consuming newline so that our switch can catch it
-  /// and count the line
-  [[nodiscard]] unsigned char peek() const {
-    if (is_at_end()) {
-      return '\0';
-    }
-    return _source[_current];
-  }
-
   /// tokenize a single word/lexeme
   void lex_token() {
-    unsigned char const ch = advance();
+    char const ch = advance();
     switch (ch) {
       using tt = Token_Type;
     case '(':
@@ -93,6 +81,9 @@ struct Lexer::impl {
     case '\n':
       ++_line; // count lines
       break;
+    case '"': // string literal
+      string_literal();
+      break;
     default:
       Lox::error(_line, "Unexpected character.");
       break;
@@ -100,7 +91,7 @@ struct Lexer::impl {
   }
 
   /// consume a character and return it
-  unsigned char advance() { return _source[_current++]; }
+  char advance() { return _source[_current++]; }
 
   void add_token(Token_Type const &type) { add_token(type, ""); }
 
@@ -109,8 +100,40 @@ struct Lexer::impl {
     _tokens.emplace_back(type, text, literal, _line);
   }
 
+  /// have we consumed all the characters?
+  [[nodiscard]] bool is_at_end() const { return _current >= _source.size(); }
+
+  /// purposefully avoids consuming newline so that our switch can catch it
+  /// and count the line
+  [[nodiscard]] char peek() const {
+    if (is_at_end()) {
+      return '\0';
+    }
+    return _source[_current];
+  }
+
+  /// store the entire string as the value of the tt::STRING
+  void string_literal() {
+    while (!is_at_end() && peek() != '"') {
+      if (peek() == '\n') {
+        ++_line; // lox supports multiline strings lol
+      }
+      advance();
+    }
+    if (peek() == '"') {
+      advance();
+      std::string const _string_literal = _source.substr(
+          _start + 1, _current - _start - 2); // don't include "'s
+      add_token(Token_Type::STRING, _string_literal);
+    } else if (is_at_end()) {
+      Lox::error(_line, "Unterminated string.");
+    } else if (peek() == '\0') {
+      Lox::error(_line, "Missing quotation mark \"");
+    }
+  }
+
   /// is the next character what we expect it to be?
-  bool match(unsigned char const expected) {
+  bool match(char const expected) {
     if (is_at_end() || _source[_current] != expected) {
       return false;
     }
