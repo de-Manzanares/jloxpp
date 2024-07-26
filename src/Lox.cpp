@@ -17,6 +17,8 @@ struct Lox::impl {
   }
 
   /// prompt the user and run the code
+  /// @note repl doesn't count lines ... a newline character never makes it
+  /// downstream
   static void run_prompt() {
     std::string const PROMPT = "lox> ";
     std::string line; // user input
@@ -24,7 +26,7 @@ struct Lox::impl {
     while (true) {
       std::cout << PROMPT;
       std::getline(std::cin, line);
-      if (std::cin.eof()) { // "Ctrl + D"
+      if (std::cin.eof()) { // "Ctrl + D", "Ctrl + Z"
         std::cout << '\n';
         break;
       }
