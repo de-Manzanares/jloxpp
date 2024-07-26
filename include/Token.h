@@ -5,18 +5,20 @@
 
 #include <memory>
 #include <string>
+#include <variant>
+
+typedef std::variant<std::string, double, bool> Token_Value;
 
 class Token {
  public:
-  explicit Token(Token_Type const &type = Token_Type::NILL, ///< constructor
-                 std::string const &lexeme = "",
-                 std::string const &literal = "", std::size_t line = 0);
+  Token(Token_Type const &type, std::string const &lexeme, ///< constructor
+        Token_Value const &value, std::size_t line);
   ~Token(); ///< destructor
 
   //*************** PUBLIC METHODS *********************************************
 
   [[nodiscard]] std::string to_string() const; ///< stringify
-  [[nodiscard]] Token_Type type() const;
+  [[nodiscard]] Token_Type type() const;       ///< @returns token type
 
   //****************************************************************************
 

@@ -37,7 +37,7 @@ struct Lox::impl {
 
   /// run the code
   static void run(std::string const &line) {
-    Lexer lexer(line);
+    Lexer const lexer(line);
 
     // for now, just print the tokens
     for (std::vector<Token> const tokens = lexer.lex_tokens();
