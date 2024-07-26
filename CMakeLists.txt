@@ -30,3 +30,8 @@ add_executable(lox
         src/Token.cpp
         src/Lexer.cpp)
 target_include_directories(lox PRIVATE include)
+
+enable_testing()
+include(CTest)
+
+add_subdirectory(test)
