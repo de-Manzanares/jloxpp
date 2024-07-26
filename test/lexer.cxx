@@ -50,6 +50,7 @@ TEST_CASE("token types") {
   CHECK(test_tt("<=", std::vector{tt::LESS_EQUAL, tt::loxEOF}));
   CHECK(test_tt("identifier", std::vector{tt::IDENTIFIER, tt::loxEOF}));
   CHECK(test_tt("\"this is a string\"", std::vector{tt::STRING, tt::loxEOF}));
+  CHECK(test_tt("\"this is \n multi line string\"", std::vector{tt::STRING, tt::loxEOF}));
   CHECK(test_tt("7", std::vector{tt::NUMBER, tt::loxEOF}));
   CHECK(test_tt("72", std::vector{tt::NUMBER, tt::loxEOF}));
   CHECK(test_tt("72.876", std::vector{tt::NUMBER, tt::loxEOF}));
