@@ -71,8 +71,10 @@ struct Lexer::impl {
         while (!is_at_end() && peek() != '\n') {
           advance();
         }
-        break;
+      } else {
+        add_token(Token_Type::SLASH);
       }
+      break;
     case ' ':
     case '\r':
     case '\t':
@@ -86,6 +88,10 @@ struct Lexer::impl {
     default:
       if (std::isdigit(ch)) { // numeric literal
         numeric_literal();
+        break;
+      }
+      if (std::isalpha(ch) || ch == '_') { // identifier
+        identifier();
         break;
       }
       Lox::error(_line, "Unexpected character.");
@@ -140,7 +146,9 @@ struct Lexer::impl {
     while (std::isdigit(peek())) {
       advance();
     }
-    // permit one decimal, but not at the end of a number e.g. "158."
+    // permit one decimal, but not at the end of a number
+    // e.g. "158.0" is valid
+    // e.g. "158."  is invalid
     if (peek() == '.' && std::isdigit(peek(1))) {
       advance();
       while (std::isdigit(peek())) {
@@ -150,6 +158,19 @@ struct Lexer::impl {
     double _numeric_literal =
         std::stod(_source.substr(_start, _current - _start));
     add_token(Token_Type::NUMBER, _numeric_literal);
+  }
+
+  /// starts with a charcter, may contain alphanumeric characters and '_'
+  void identifier() {
+    while (isalnum(peek()) || peek() == '_') {
+      advance();
+    }
+    if (std::string const word = _source.substr(_start, _current - _start);
+        keywords.contains(word)) {
+      add_token(keywords[word]);
+    } else {
+      add_token(Token_Type::IDENTIFIER);
+    }
   }
 
   /// is the next character what we expect it to be?
@@ -168,6 +189,26 @@ Lexer::Lexer(std::string const &source) ///< constructor
     : pimpl(std::make_unique<impl>(source)) {}
 
 Lexer::~Lexer() = default; ///< destructor
+
+std::unordered_map<std::string, Token_Type> Lexer::keywords = {
+    // clang-format off
+    {"and",                   Token_Type::AND},
+    {"class",                 Token_Type::CLASS},
+    {"else",                  Token_Type::ELSE},
+    {"false",                 Token_Type::FALSE},
+    {"fun",                   Token_Type::FUN},
+    {"for",                   Token_Type::FOR},
+    {"if",                    Token_Type::IF},
+    {"nil",                   Token_Type::NIL},
+    {"or",                    Token_Type::OR},
+    {"print",                 Token_Type::PRINT},
+    {"return",                Token_Type::RETURN},
+    {"super",                 Token_Type::SUPER},
+    {"this",                  Token_Type::THIS},
+    {"true",                  Token_Type::TRUE},
+    {"var",                   Token_Type::VAR},
+    {"while",                 Token_Type::WHILE}};
+// clang-format on
 
 std::vector<Token> Lexer::lex_tokens() const { ///< tokenize the source code
   while (!pimpl->is_at_end()) {
