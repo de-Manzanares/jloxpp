@@ -53,6 +53,7 @@ TEST_CASE("token types") {
   CHECK(test_tt("identi_f_ier123", std::vector{tt::IDENTIFIER, tt::loxEOF}));
   CHECK(test_tt("\"this is a string\"", std::vector{tt::STRING, tt::loxEOF}));
   CHECK(test_tt("\"2 line\nstring\"", std::vector{tt::STRING, tt::loxEOF}));
+  CHECK(test_tt("\"unterminated", std::vector{tt::loxEOF}));
   CHECK(test_tt("7", std::vector{tt::NUMBER, tt::loxEOF}));
   CHECK(test_tt("72", std::vector{tt::NUMBER, tt::loxEOF}));
   CHECK(test_tt("72.876", std::vector{tt::NUMBER, tt::loxEOF}));
@@ -72,4 +73,6 @@ TEST_CASE("token types") {
   CHECK(test_tt("true", std::vector{tt::TRUE, tt::loxEOF}));
   CHECK(test_tt("var", std::vector{tt::VAR, tt::loxEOF}));
   CHECK(test_tt("while", std::vector{tt::WHILE, tt::loxEOF}));
+  CHECK(test_tt("// this is a comment", std::vector{tt::loxEOF}));
+  CHECK(test_tt(" \r \t ", std::vector{tt::loxEOF}));
 }
