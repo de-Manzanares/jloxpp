@@ -136,8 +136,6 @@ struct Lexer::impl {
       add_token(Token_Type::STRING, _string_literal);
     } else if (is_at_end()) {
       Lox::error(_line, "Unterminated string.");
-    } else if (peek() == '\0') {
-      Lox::error(_line, "Missing quotation mark \"");
     }
   }
 
