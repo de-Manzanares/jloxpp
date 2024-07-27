@@ -2,6 +2,7 @@ cmake_minimum_required(VERSION 3.28)
 project(jloxpp)
 
 set(CMAKE_CXX_STANDARD 23)
+set(CMAKE_VERBOSE_MAKEFILE)
 
 if (CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
     set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS} -Wall -Wextra -Wpedantic -Werror -Og -fprofile-arcs -ftest-coverage --coverage")
