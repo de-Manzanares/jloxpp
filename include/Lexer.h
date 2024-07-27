@@ -5,12 +5,15 @@
 
 #include <memory>
 #include <string>
+#include <unordered_map>
 #include <vector>
 
 class Lexer {
  public:
   explicit Lexer(std::string const &source = ""); ///< constructor
   ~Lexer();                                       ///< destructor
+  static std::unordered_map<std::string, Token_Type>
+      keywords; ///< for keyword lookup
 
   //*************** PUBLIC METHODS *********************************************
 
