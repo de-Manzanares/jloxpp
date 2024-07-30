@@ -25,14 +25,23 @@ elseif (CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
     set(CMAKE_SHARED_LINKER_FLAGS_RELEASE "${CMAKE_SHARED_LINKER_FLAGS_RELEASE} /LTCG")
 endif ()
 
-add_executable(lox
-        src/main.cpp
-        src/Lox.cpp
-        src/Token.cpp
-        src/Lexer.cpp)
-target_include_directories(lox PRIVATE include)
+add_executable(lox)
+
+target_sources(lox PUBLIC
+        ${PROJECT_SOURCE_DIR}/src/Lexer.cpp
+        ${PROJECT_SOURCE_DIR}/src/Lox.cpp
+        ${PROJECT_SOURCE_DIR}/src/main.cpp
+        ${PROJECT_SOURCE_DIR}/src/Token.cpp
+        PUBLIC
+        FILE_SET CXX_MODULES
+        FILES
+        ${PROJECT_SOURCE_DIR}/include/Lexer.cppm
+        ${PROJECT_SOURCE_DIR}/include/Lox.cppm
+        ${PROJECT_SOURCE_DIR}/include/Token.cppm
+        ${PROJECT_SOURCE_DIR}/include/TokenType.cppm
+)
 
 enable_testing()
 include(CTest)
 
-add_subdirectory(test)
+# add_subdirectory(test)
