@@ -1,8 +1,8 @@
 cmake_minimum_required(VERSION 3.28)
-project(jloxpp)
-
+project(lw-lm)
 set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_VERBOSE_MAKEFILE)
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/bin)
 
 if (CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
     set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS} -Wall -Wextra -Wpedantic -Werror -Og -fprofile-arcs -ftest-coverage --coverage")
@@ -25,23 +25,17 @@ elseif (CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
     set(CMAKE_SHARED_LINKER_FLAGS_RELEASE "${CMAKE_SHARED_LINKER_FLAGS_RELEASE} /LTCG")
 endif ()
 
-add_executable(lox)
 
-target_sources(lox PUBLIC
-        ${PROJECT_SOURCE_DIR}/src/Lexer.cpp
-        ${PROJECT_SOURCE_DIR}/src/Lox.cpp
-        ${PROJECT_SOURCE_DIR}/src/main.cpp
-        ${PROJECT_SOURCE_DIR}/src/Token.cpp
-        PUBLIC
-        FILE_SET CXX_MODULES
-        FILES
-        ${PROJECT_SOURCE_DIR}/include/Lexer.cppm
-        ${PROJECT_SOURCE_DIR}/include/Lox.cppm
-        ${PROJECT_SOURCE_DIR}/include/Token.cppm
-        ${PROJECT_SOURCE_DIR}/include/TokenType.cppm
-)
+add_subdirectory(lw)
+add_subdirectory(lm)
 
-enable_testing()
-include(CTest)
+find_package(Catch2 3 QUIET)
 
-# add_subdirectory(test)
+if (Catch2_FOUND)
+    enable_testing()
+    include(CTest)
+    message(STATUS "Catch2 v3 found, tests will be built")
+    add_subdirectory(lw/test)
+else ()
+    message(STATUS "Catch2 v3 not found, tests will not be built.")
+endif ()
