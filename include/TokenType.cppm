@@ -1,9 +1,8 @@
-#ifndef INCLUDE_TOKENTYPE_HPP_
-#define INCLUDE_TOKENTYPE_HPP_
+module;
+export module Token_Type;
 
-enum class Token_Type {
+export enum class Token_Type {
   // clang-format off
-  //
   NILL,
 
   // Single-character tokens.
@@ -26,5 +25,3 @@ enum class Token_Type {
   loxEOF
   // clang-format on
 };
-
-#endif // INCLUDE_TOKENTYPE_HPP_
