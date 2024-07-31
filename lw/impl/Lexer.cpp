@@ -1,14 +1,14 @@
-#include "Lexer.h"
+module;
 
-#include "Lox.h"
-
-#include <iostream>
-#include <utility>
+#include <cctype>
+#include <memory>
+#include <string>
+#include <unordered_map>
 #include <vector>
 
-//***************** PRIVATE IMPLEMENTATION *************************************
+module Lexer;
 
-class Token;
+//***************** PRIVATE IMPLEMENTATION *************************************
 
 struct Lexer::impl {
   /// constructor
@@ -94,7 +94,7 @@ struct Lexer::impl {
         identifier();
         break;
       }
-      Lox::error(_line, "Unexpected character.");
+      // TODO Lox::error(_line, "Unexpected character.");
       break;
     }
   }
@@ -135,7 +135,7 @@ struct Lexer::impl {
           _start + 1, _current - _start - 2); // don't include "'s
       add_token(Token_Type::STRING, _string_literal);
     } else if (is_at_end()) {
-      Lox::error(_line, "Unterminated string.");
+      // TODO Lox::error(_line, "Unterminated string.");
     }
   }
 

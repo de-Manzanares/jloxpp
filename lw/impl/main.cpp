@@ -1,4 +1,4 @@
-#include "Lox.h"
+import Lox;
 
 int main(int const argc, char const *argv[]) {
   const Lox lox;
