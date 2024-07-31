@@ -30,11 +30,12 @@ which "contains the Markdown text of the book, [and] full implementations of bot
 ### Build From Source
 
 #### Prerequisites
+
 This project uses C++20 language features, the most tool-restrictive of which
 being modules. To build this project from source, one would need:
 
 - CMake version 3.28 or greater.
-- Ninja build system.
+- Ninja version 1.11 or greater.
 - A compiler with C++20 module support.
     - This author has used Clang 18.1.8 and MSVC 19.40
 
@@ -60,7 +61,7 @@ compilers to be used by replacing the above cmake command with
 cmake -B build -G Ninja -D CMAKE_BUILD_TYPE=Release -D CMAKE_C_COMPILER=path/to/your/C/compiler -D CMAKE_CXX_COMPILER=path/to/your/C++/compiler
 ```
 
-#### Integrated Development Environment 
+#### Integrated Development Environment
 
 As an alternative, if you have an IDE with CMake support, you may clone the repository and select
 the CMake targets from within the IDE. 
