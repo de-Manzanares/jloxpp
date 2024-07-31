@@ -1,9 +1,11 @@
-#include "Lox.h"
-
-#include "Lexer.h"
+module;
 
 #include <iostream>
+#include <memory>
+#include <string>
 #include <vector>
+
+module Lox;
 
 //***************** PRIVATE IMPLEMENTATION *************************************
 
@@ -40,7 +42,7 @@ struct Lox::impl {
     Lexer const lexer(line);
 
     // for now, just print the tokens
-    for (std::vector<Token> const tokens = lexer.lex_tokens();
+    for (std::vector const tokens{lexer.lex_tokens()};
          auto const &token : tokens) {
       std::cout << token.to_string() << '\n';
     }

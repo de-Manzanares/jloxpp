@@ -1,7 +1,10 @@
-#include "Token.h"
+module;
 
-#include <iostream>
-#include <utility>
+#include <memory>
+#include <string>
+#include <variant>
+
+module Token;
 
 //***************** PRIVATE IMPLEMENTATION *************************************
 

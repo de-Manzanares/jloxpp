@@ -1,7 +1,6 @@
-#include "Lexer.h"
-#include "Token.h"
-#include "TokenType.hpp"
 #include <catch2/catch_all.hpp>
+
+import Lexer;
 
 using tt = Token_Type;
 
